@@ -6,8 +6,16 @@ LABEL maintainer="Kyle Warner"
 
 ENV PYTHONUNBUFFERED 1
 
+# Install system packages into image
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install --no-install-recommends postgresql-client -y
+RUN apt-get install --no-install-recommends gcc libc-dev -y
+
+ # Install python packages
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
+
+RUN apt remove gcc libc-dev -y
 
 RUN mkdir /app
 WORKDIR /app
